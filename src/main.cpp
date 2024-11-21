@@ -5,7 +5,7 @@
 int main(int argv, char** argc){
 	Person* A = new Person("Mike");
 	Person* B = new Person("Ted");
-	Boat* bt = new Boat(B);
+	Boat* bt = new Boat();
 	A->printAboutMe();
 	B->printAboutMe();
 	return 0;

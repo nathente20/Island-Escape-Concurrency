@@ -1,14 +1,20 @@
 #ifndef _BOAT_H_
 #define _BOAT_H_
 #include <string>
+#include <mutex>
+#include "semaphore.h"
 #include "person.h"
 class Person;
 
 class Boat{
 private:
-	Person* myCreator;
+	Semaphore nextDriver;
+	Semaphore nextPassenger;
+	int numOccupants;
+	std::mutex ocLk;
+
 public:
-	Boat(Person* P);
+	Boat();
 	std::string info();
 };
 

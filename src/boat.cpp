@@ -1,5 +1,12 @@
+#include "semaphore.h"
 #include "boat.h"
 #include <string>
 
-std::string Boat::info() { return ""; }
-Boat::Boat(Person* P) { }
+Boat::Boat() :
+	nextDriver(Semaphore(0)),
+	nextPassenger(Semaphore(0)),
+	numOccupants(0) {}
+
+std::string Boat::info() {
+	return "";
+}
