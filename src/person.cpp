@@ -9,9 +9,5 @@ std::string Person::getName(){
 }
 void Person::printAboutMe(){
 	std::cout << name;
-	if(myBoat!=nullptr){
-		std::cout << " has a boat with "
-		<< myBoat ->info();
-	}
 	std::cout << std::endl;
 }
