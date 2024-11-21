@@ -21,7 +21,8 @@ void Boat::boardDriver(Person p) {
 		twoPeopleOn.signal();
 	}
 	// start rowing
-
+	p.row();
+	// use p.age to update the count of rows
 	// done rowing
 	arrival.signal();
 	// get off island (kill thread)
@@ -38,10 +39,11 @@ void Boat::boardPassenger(Person p) {
 	else {
 		twoPeopleOn.signal();
 	}
+	p.rest();
 	// wait for driver to finish rowing
 	arrival.wait();
 	// start rowing back
-	
+	p.row();
 	// done rowing back
 	// passenger will release the lock ALWAYS
 	inUse.unlock();

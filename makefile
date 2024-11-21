@@ -17,6 +17,11 @@ bin/main: obj/semaphore.o obj/boat.o obj/person.o src/main.cpp
 	${GCC} ${STD} -o $@ $^
 run: bin/main
 	./$<
+bin/testPeople: obj/semaphore.o obj/boat.o obj/person.o src/testPeople.cpp
+	[ -d $(BIN) ] || mkdir -p $(BIN)
+	${GCC} ${STD} -o $@ $^
+testPeople: bin/testPeople
+	./$<
 clean:
 	rm -f obj/*.o
 	rm -f bin/main

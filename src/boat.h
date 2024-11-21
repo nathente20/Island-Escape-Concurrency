@@ -12,18 +12,19 @@ private:
 	// these should be moved to a separate barrier class
 	Semaphore nextDriver;
 	Semaphore nextPassenger;
+	int numOccupants;
 
 	Semaphore twoPeopleOn;
 	Semaphore arrival;
-	int numOccupants;
 	std::mutex inUse;
 
 public:
 	Boat();
 	std::string info();
-	
+
 	void boardDriver(Person p);
 	void boardPassenger(Person p);
+	
 };
 
 #endif

@@ -6,16 +6,24 @@
 #include "boat.h"
 class Boat;
 
+enum Age {
+	CHILD,
+	ADULT
+};
+
 class Person{
 private:
 	std::string name;
-	unsigned int age_class;
+	enum Age age;
+	unsigned int energy;
 public:
-	Person(std::string n);
+	Person(std::string n, enum Age age);
 	std::string getName();
 	void printAboutMe();
+	void row();
+	void rest();
+	void escape();
 
-	void waitToBe(Semaphore line, void* roleBehavior);
 };
 
 #endif
