@@ -3,6 +3,7 @@
 #include <string>
 #include <mutex>
 #include "semaphore.h"
+
 #include "person.h"
 class Person;
 
@@ -16,6 +17,8 @@ private:
 public:
 	Boat();
 	std::string info();
+
+	void setDriver(Person p);
 };
 
 #endif
