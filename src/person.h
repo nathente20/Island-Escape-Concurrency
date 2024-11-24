@@ -22,7 +22,7 @@ public:
 	void printAboutMe();
 	void row();
 	void rest();
-	void escape();
+	void escape(); // I am not sure about the purpose of this function other than just being a readable way of saying I'm out!!
 
 };
 

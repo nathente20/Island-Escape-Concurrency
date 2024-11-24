@@ -6,6 +6,9 @@ BIN=bin
 obj/semaphore.o: src/semaphore.cpp src/semaphore.h
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${GCC} ${STD} -c -o $@ $<
+obj/barrier.o: src/barrier.cpp src/barrier.h
+	[ -d $(OBJ) ] || mkdir -p $(OBJ)
+	${GCC} ${STD} -c -o $@ $<
 obj/person.o: src/person.cpp src/person.h 
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${GCC} ${STD} -c -o $@ $<

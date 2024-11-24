@@ -37,6 +37,6 @@ void Person::rest(){
 }
 
 void Person::escape() {
-
+	return;
 }
 
