@@ -19,13 +19,23 @@ private:
 	int remainingCapacity;
 	bool rolesDecided;
 
-	void enter(Person& p);
+	//void enter(Person& p);
 	void decideDriverAndPassenger();
 	void leave(Person& p);
 
 public:
 	Barrier();
 	void wait(Person& p);
+
+	void enter(Person& p);
+	//friend class TestBarrier;
 };
+
+/*
+class TestBarrier {
+public:
+	static void run(Barrier& brr, Person& p);
+};
+*/
 
 #endif

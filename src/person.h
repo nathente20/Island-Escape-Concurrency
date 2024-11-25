@@ -8,8 +8,8 @@ class Boat;
 
 enum Weight {
 	CHILD = 2,
-	ADULT = 5,
-	FULL
+	ADULT = 3,
+	FULL = 5
 };
 
 class Person{
