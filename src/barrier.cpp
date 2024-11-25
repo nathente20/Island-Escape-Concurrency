@@ -96,7 +96,16 @@ void Barrier::decideDriverAndPassenger() {
 }
 
 void Barrier::leave(std::shared_ptr<Person> p) {
-	
+	{
+		std::lock_guard<std::mutex> lk(lock);
+		numReadyToLeave++;
+		if (numReadyToLeave == 2) {
+			exit.signal();
+			exit.signal();
+		}
+	}
+	// not automatically signalling entranceLine since we do not know if boat is ready yet
+	exit.wait();
 }
 
 void Barrier::wait(std::shared_ptr<Person> p) {

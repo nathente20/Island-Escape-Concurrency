@@ -18,6 +18,7 @@ private:
 	std::mutex lock;
 	std::vector<std::shared_ptr<Person>> nextRiders;
 	int remainingCapacity;
+	int numReadyToLeave;
 	bool rolesDecided;
 
 	//void enter(Person& p);
@@ -27,7 +28,6 @@ private:
 public:
 	Barrier();
 	void wait(std::shared_ptr<Person> p);
-
 	bool enter(std::shared_ptr<Person> p);
 	//friend class TestBarrier;
 };

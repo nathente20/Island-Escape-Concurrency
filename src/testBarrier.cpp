@@ -19,10 +19,6 @@ int main() {
 	std::shared_ptr<Person> c = std::make_shared<Person>("Summer", Weight::CHILD);
 	std::shared_ptr<Person> d = std::make_shared<Person>("Beth", Weight::ADULT);
 	std::shared_ptr<Person> e = std::make_shared<Person>("Rick", Weight::ADULT);
-	//std::shared_ptr<Person> b{"Morty", Weight::CHILD};
-	//std::shared_ptr<Person> c{"Summer", Weight::CHILD};
-	//std::shared_ptr<Person> d{"Beth", Weight::ADULT};
-	//std::shared_ptr<Person> e{"Rick", Weight::ADULT};
 	std::vector<std::shared_ptr<Person>> fam{
 		a, b, c, d, e
 	};
@@ -30,8 +26,6 @@ int main() {
 	
 	Barrier brr;
 	for (auto j=0; j<fam.size(); j++) {
-		//std::thread t(TestBarrier::run, std::ref(brr), std::ref(p));
-		//std::thread t(run, std::ref(brr), std::ref(fam[j]));
 		tFam.push_back(std::thread(run, std::ref(brr), fam[j]));
 	}
 
