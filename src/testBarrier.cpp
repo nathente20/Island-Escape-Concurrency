@@ -9,18 +9,22 @@ void TestBarrier::run(Barrier& brr, Person& p) {
 }
 */
 
-void run(Barrier& brr, Person& p) {
-	brr.wait(std::ref(p));
+void run(Barrier& brr, std::shared_ptr<Person> p) {
+	brr.wait(p);
 }
 
 int main() {
-	Person a{"Jerry", Weight::ADULT};
-	Person b{"Morty", Weight::CHILD};
-	Person c{"Summer", Weight::CHILD};
-	Person d{"Beth", Weight::ADULT};
-	Person e{"Rick", Weight::ADULT};
-	std::vector<Person> fam{
-		b, c 
+	std::shared_ptr<Person> a = std::make_shared<Person>("Jerry", Weight::ADULT);
+	std::shared_ptr<Person> b = std::make_shared<Person>("Morty", Weight::CHILD);
+	std::shared_ptr<Person> c = std::make_shared<Person>("Summer", Weight::CHILD);
+	std::shared_ptr<Person> d = std::make_shared<Person>("Beth", Weight::ADULT);
+	std::shared_ptr<Person> e = std::make_shared<Person>("Rick", Weight::ADULT);
+	//std::shared_ptr<Person> b{"Morty", Weight::CHILD};
+	//std::shared_ptr<Person> c{"Summer", Weight::CHILD};
+	//std::shared_ptr<Person> d{"Beth", Weight::ADULT};
+	//std::shared_ptr<Person> e{"Rick", Weight::ADULT};
+	std::vector<std::shared_ptr<Person>> fam{
+		a, b, c, d, e
 	};
 	std::vector<std::thread> tFam{};
 	
@@ -28,7 +32,7 @@ int main() {
 	for (auto j=0; j<fam.size(); j++) {
 		//std::thread t(TestBarrier::run, std::ref(brr), std::ref(p));
 		//std::thread t(run, std::ref(brr), std::ref(fam[j]));
-		tFam.push_back(std::thread(run, std::ref(brr), std::ref(fam[j])));
+		tFam.push_back(std::thread(run, std::ref(brr), fam[j]));
 	}
 
 	for (auto i=0; i< tFam.size(); i++) {

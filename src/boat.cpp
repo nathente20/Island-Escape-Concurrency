@@ -22,7 +22,6 @@ void Boat::boardDriver(Person p) {
 	}
 	// start rowing
 	p.row();
-	// use p.age to update the count of rows
 	// done rowing
 	arrival.signal();
 	// get off island (kill thread)

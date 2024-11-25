@@ -3,6 +3,7 @@
 #include <string>
 #include <mutex>
 #include <vector>
+#include <memory>
 #include "semaphore.h"
 
 #include "person.h"
@@ -21,13 +22,13 @@ private:
 
 	//void enter(Person& p);
 	void decideDriverAndPassenger();
-	void leave(Person& p);
+	void leave(std::shared_ptr<Person> p);
 
 public:
 	Barrier();
-	void wait(Person& p);
+	void wait(std::shared_ptr<Person> p);
 
-	bool enter(Person& p);
+	bool enter(std::shared_ptr<Person> p);
 	//friend class TestBarrier;
 };
 
