@@ -6,23 +6,24 @@
 #include "boat.h"
 class Boat;
 
-enum Age {
-	CHILD,
-	ADULT
+enum Weight {
+	CHILD = 2,
+	ADULT = 5,
+	FULL
 };
 
 class Person{
 private:
 	std::string name;
-	enum Age age;
 	unsigned int energy;
 public:
-	Person(std::string n, enum Age age);
+	const enum Weight weight;
+	Person(std::string n, enum Weight weight);
 	std::string getName();
 	void printAboutMe();
 	void row();
 	void rest();
-	void escape(); // I am not sure about the purpose of this function other than just being a readable way of saying I'm out!!
+	void escape(); // I think this is supposed to be the driver function that is run as its own thread, will add necessary context as needed
 
 };
 

@@ -15,6 +15,10 @@ obj/person.o: src/person.cpp src/person.h
 obj/boat.o: src/boat.cpp src/boat.h
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${GCC} ${STD} -c -o $@ $<
+obj/barrier.o: src/barrier.cpp src/barrier.h
+	[ -d $(OBJ) ] || mkdir -p $(OBJ)
+	${GCC} ${STD} -c -o $@ $<
+
 bin/main: obj/semaphore.o obj/boat.o obj/person.o src/main.cpp
 	[ -d $(BIN) ] || mkdir -p $(BIN)
 	${GCC} ${STD} -o $@ $^
@@ -25,8 +29,13 @@ bin/testPeople: obj/semaphore.o obj/boat.o obj/person.o src/testPeople.cpp
 	${GCC} ${STD} -o $@ $^
 testPeople: bin/testPeople
 	./$<
+bin/testBarrier: obj/semaphore.o obj/barrier.o obj/person.o src/testBarrier.cpp
+	[ -d $(BIN) ] || mkdir -p $(BIN)
+	${GCC} ${STD} -o $@ $^
+testBarrier: bin/testBarrier
+	./$<
 clean:
 	rm -f obj/*.o
-	rm -f bin/main
+	rm -f bin/*
 	rm -r -f bin
 	rm -r -f obj

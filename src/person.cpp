@@ -4,9 +4,9 @@
 #include <cstdlib>
 #include "person.h"
 
-Person::Person(std::string n, enum Age age_class) : 
+Person::Person(std::string n, enum Weight weight_class) : 
 	energy(4),
-	age(age_class),
+	weight(weight_class),
 	name(n) {}
 
 std::string Person::getName(){
@@ -17,7 +17,7 @@ void Person::printAboutMe(){
 		"My name is " <<
 		name << 
 		". My age classification is " <<
-		age <<
+		weight <<
 		std::endl;
 }
 
@@ -36,7 +36,6 @@ void Person::rest(){
 	}
 }
 
-void Person::escape() {
-	return;
-}
+//void Person::escape(World& w) {
+//}
 

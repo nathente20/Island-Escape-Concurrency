@@ -1,65 +1,63 @@
 #include "barrier.h"
+#include <mutex>
+#include <memory>
+#include <iostream>
 
+Barrier::Barrier() :
+	waitingArea(Semaphore(0)),
+	//entranceLine(Semaphore(0)),
+	exit(Semaphore(0)),
+	remainingCapacity(5),
+	rolesDecided(false)
+	{ }
 
 void Barrier::enter(Person& p) {
 	while (true) {
-		// if not enough room left you have to try again 
-		lk.lock();
-		if (p.weight > remainingWeight) {
-			lk.unlock();
-			continue;
+		lock.lock();
+		// if there is space left for this person
+		if (remainingCapacity >= p.weight) {
+			remainingCapacity -= p.weight;
+			// add person to collection of next riders
+			nextRiders.push_back(std::make_shared<Person>(p));
+			// if at full capacity
+			if (remainingCapacity <= 1) {
+				// signaling pair of people that will get on boat
+				std::cout << p.getName() << " releasing the flood gates!!" << std::endl;
+				waitingArea.signal();
+				waitingArea.signal();
+			}
+			std::cout << p.getName() << " is verified!!" << std::endl;
+			p.printAboutMe();
+			lock.unlock();
+			// this thread is ready to enter barrier
+			waitingArea.wait();
+			// let other thread try to get in
+			//entranceLine.signal();
+			return;
 		}
-		break;
+		// failed entry
+		lock.unlock();
 	}
-
-	remainingWeight -= p.weight;
-	occupants.push(p); // TODO: this is not correct api call
-
-	// if we are at capacity
-	if (remainingWeight < 2) {
-		entranceGate.signal();
-		entranceGate.signal();
-	}
-
-	// signal other soon-to-be occupant to enter
-	lk.unlock();
-	entranceGate.wait();
 }
 
-void Barrier::determineDriverAndPassenger() {
-	lk.lock();
-	// if other thread did work already, then move on
-	if (rolesDetermined) {
-		lk.unlock();
-		return;
+void Barrier::decideDriverAndPassenger() {
+	{
+		std::lock_guard<std::mutex> lk(lock);
+		if (rolesDecided) {
+			return;
+		}
+		
+		std::shared_ptr<Person> p1;
+		std::shared_ptr<Person> p2;
 	}
-	// iterate through occupants
-	// heaviest is driver
-	// lightest is passenger 
-	rolesDetermned = true;
-	lk.unlock();
 }
 
 void Barrier::leave(Person& p) {
-	lk.lock();
-	// remove one person from the vector of people
-	passengersAtExit++;
-	// if everyone is waiting at exit
-	if (passengersAtExit == 2) {
-		// let other person waiting get off
-		exitGate.signal();
-		// reset state of barrier
-		rolesDetermined = false;
-		passengersAtExit = 0;
-		remainingWeight = 5;
-		lock.unlock();
-		return;
-	}
-	lock.unlock();
-	exitGate.wait();
+
 }
 
 void Barrier::wait(Person& p) {
 	enter(std::ref(p));
+	decideDriverAndPassenger();
 	leave(std::ref(p));
 }

@@ -1,23 +1,31 @@
-class Barrier{
+#ifndef _BARRIER_H_
+#define _BARRIER_H_
+#include <string>
+#include <mutex>
+#include <vector>
+#include "semaphore.h"
 
+#include "person.h"
+class Person;
+
+class Barrier{
 private:
-	// used to keep track of threads that will be guaranteed next onto the boat
-	Semaphore entranceGate;
-	Semaphore exitGate;
-	// actually do not need this AND remainingWeight, remainingWeight keeps and implicit total of people
-	//unsigned int numPeopleWaiting; // number of people outside of barrier that have been verified to be next to get into the boat
-	unsigned int remainingWeight; // emtpy 5, adults weight 3, children weight 2
-	unsigned int passengersAtExit;
-	bool rolesDetermined;
-	std::vector<Person> occupants;
-	std::mutex lk;
-	
-	// order of exit does not matter so long as we set the states of the people before they all exit
+	Semaphore waitingArea;
+	//Semaphore entranceLine;
+	Semaphore exit;
+
+	std::mutex lock;
+	std::vector<std::shared_ptr<Person>> nextRiders;
+	int remainingCapacity;
+	bool rolesDecided;
+
 	void enter(Person& p);
-	void determineDriverAndPassenger();
+	void decideDriverAndPassenger();
 	void leave(Person& p);
 
 public:
+	Barrier();
 	void wait(Person& p);
-
 };
+
+#endif
