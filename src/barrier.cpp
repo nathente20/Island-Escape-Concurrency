@@ -5,7 +5,7 @@
 #include <thread>
 
 Barrier::Barrier() :
-	waitingArea(Semaphore(0)),
+	nextToEnter(Semaphore(0)),
 	entranceLine(Semaphore(1)),
 	exit(Semaphore(0)),
 	remainingCapacity(Weight::FULL),
@@ -32,8 +32,9 @@ bool Barrier::enter(std::shared_ptr<Person> p) {
 			if (remainingCapacity <= 1) {
 				// signaling pair of people that will get on boat
 				std::cout << p->getName() << " has made boat reach full capacity!!" << std::endl;
-				waitingArea.signal();
-				waitingArea.signal();
+				nextToEnter.signal();
+				nextToEnter.signal();
+				// not calling entranceLine.signal since we are no longer accepting people
 			}
 			else {
 				// allow another thread to try to get in if incomplete pair 
@@ -41,7 +42,7 @@ bool Barrier::enter(std::shared_ptr<Person> p) {
 			}
 			lock.unlock();
 			// this thread is ready to enter barrier
-			waitingArea.wait();
+			nextToEnter.wait();
 			std::cout << p->getName() << " is verified!!" << std::endl;
 			p->printAboutMe();
 		}
@@ -99,13 +100,21 @@ void Barrier::leave(std::shared_ptr<Person> p) {
 	{
 		std::lock_guard<std::mutex> lk(lock);
 		numReadyToLeave++;
-		if (numReadyToLeave == 2) {
-			exit.signal();
-			exit.signal();
-		}
+		//if (numReadyToLeave == 2) {
+			//readyToLeave.signal();
+		//}
 	}
-	// not automatically signalling entranceLine since we do not know if boat is ready yet
+	// waiting for signalWaitingGroup to be signaled
+	// we do not know for sure if boat is ready for more passengers
 	exit.wait();
+}
+
+void Barrier::signalWaitingGroup() {
+	//readyToLeave.wait();
+	exit.signal();
+	exit.signal();
+	// can start looking for the next pair of people
+	entranceLine.signal();
 }
 
 void Barrier::wait(std::shared_ptr<Person> p) {

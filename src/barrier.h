@@ -11,9 +11,10 @@ class Person;
 
 class Barrier{
 private:
-	Semaphore waitingArea;
+	Semaphore nextToEnter;
 	Semaphore entranceLine;
 	Semaphore exit;
+	//Semaphore readyToLeave;
 
 	std::mutex lock;
 	std::vector<std::shared_ptr<Person>> nextRiders;
@@ -28,6 +29,7 @@ private:
 public:
 	Barrier();
 	void wait(std::shared_ptr<Person> p);
+	void signalWaitingGroup();
 	bool enter(std::shared_ptr<Person> p);
 	//friend class TestBarrier;
 };
