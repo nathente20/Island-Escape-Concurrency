@@ -47,7 +47,6 @@ bool Barrier::enter(Person& p) {
 		}
 		else {
 			retry = true;
-
 			std::cout << p.getName() << " is too heavy" << std::endl;
 			lock.unlock();
 			entranceLine.signal();
@@ -61,11 +60,40 @@ void Barrier::decideDriverAndPassenger() {
 	{
 		std::lock_guard<std::mutex> lk(lock);
 		if (rolesDecided) {
+			
+			// no longer need to keep track of these
+			nextRiders.pop_back();
+			nextRiders.pop_back();
+			std::cout << "No work for me!" << std::endl;
 			return;
 		}
 		
-		std::shared_ptr<Person> p1;
-		std::shared_ptr<Person> p2;
+		std::shared_ptr<Person> p1 = nextRiders[0];
+		std::shared_ptr<Person> p2 = nextRiders[1];
+
+		if (p1->weight > p2->weight) {
+			p1->isDriver = true;
+			p2->isDriver = false;
+		}
+		else {	
+			p1->isDriver = false;
+			p2->isDriver = true;
+		}
+
+		std::cout << "===============================" << std::endl;
+		std::cout << "Determined roles" << std::endl;
+		std::cout << p1->getName() << " is ";
+		if (!(p1->isDriver)) {
+			std::cout << "not ";
+		}
+		std::cout << " driver" << std::endl;
+		std::cout << p2->getName() << " is ";
+		if (!(p2->isDriver)) {
+			std::cout << "not ";
+		}
+		std::cout << " driver" << std::endl;
+
+		rolesDecided = true;
 	}
 }
 

@@ -20,7 +20,6 @@ int main() {
 	Person d{"Beth", Weight::ADULT};
 	Person e{"Rick", Weight::ADULT};
 	std::vector<Person> fam{
-		a, d, e,
 		b, c 
 	};
 	std::vector<std::thread> tFam{};

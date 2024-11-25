@@ -21,6 +21,10 @@ void Person::printAboutMe(){
 		std::endl;
 }
 
+void Person::setRole(bool role) {
+	this->isDriver = role;
+}
+
 void Person::row(){
 	// lock randomizer later
 	int waitTime;

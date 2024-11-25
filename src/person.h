@@ -17,10 +17,12 @@ private:
 	std::string name;
 	unsigned int energy;
 public:
+	bool isDriver;
 	const enum Weight weight;
 	Person(std::string n, enum Weight weight);
 	std::string getName();
 	void printAboutMe();
+	void setRole(bool role);
 	void row();
 	void rest();
 	void escape(); // I think this is supposed to be the driver function that is run as its own thread, will add necessary context as needed
