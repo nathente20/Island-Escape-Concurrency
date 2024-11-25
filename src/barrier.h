@@ -11,7 +11,7 @@ class Person;
 class Barrier{
 private:
 	Semaphore waitingArea;
-	//Semaphore entranceLine;
+	Semaphore entranceLine;
 	Semaphore exit;
 
 	std::mutex lock;
@@ -27,7 +27,7 @@ public:
 	Barrier();
 	void wait(Person& p);
 
-	void enter(Person& p);
+	bool enter(Person& p);
 	//friend class TestBarrier;
 };
 

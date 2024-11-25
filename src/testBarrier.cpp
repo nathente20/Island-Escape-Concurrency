@@ -10,7 +10,7 @@ void TestBarrier::run(Barrier& brr, Person& p) {
 */
 
 void run(Barrier& brr, Person& p) {
-	brr.enter(std::ref(p));
+	brr.wait(std::ref(p));
 }
 
 int main() {
@@ -20,7 +20,7 @@ int main() {
 	Person d{"Beth", Weight::ADULT};
 	Person e{"Rick", Weight::ADULT};
 	std::vector<Person> fam{
-		a, d, c, b, e
+		b, c, d, e, a
 	};
 	std::vector<std::thread> tFam{};
 	
@@ -28,7 +28,7 @@ int main() {
 	for (auto j=0; j<fam.size(); j++) {
 		//std::thread t(TestBarrier::run, std::ref(brr), std::ref(p));
 		//std::thread t(run, std::ref(brr), std::ref(fam[j]));
-		tFam.push_back(std::thread{run, std::ref(brr), std::ref(fam[j])});
+		tFam.push_back(std::thread(run, std::ref(brr), std::ref(fam[j])));
 	}
 
 	for (auto i=0; i< tFam.size(); i++) {
