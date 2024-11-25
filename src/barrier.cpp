@@ -13,7 +13,7 @@ Barrier::Barrier() :
 	{ }
 
 bool Barrier::enter(Person& p) {
-	//entranceLine.wait();
+	entranceLine.wait();
 	bool retry;
 	{
 		lock.lock();
@@ -35,9 +35,11 @@ bool Barrier::enter(Person& p) {
 				waitingArea.signal();
 				waitingArea.signal();
 			}
+			else {
+				// allow another thread to try to get in if incomplete pair 
+				entranceLine.signal();
+			}
 			lock.unlock();
-			// allow another thread to try to get in 
-			//entranceLine.signal();
 			// this thread is ready to enter barrier
 			waitingArea.wait();
 			std::cout << p.getName() << " is verified!!" << std::endl;
@@ -48,7 +50,7 @@ bool Barrier::enter(Person& p) {
 
 			std::cout << p.getName() << " is too heavy" << std::endl;
 			lock.unlock();
-			//entranceLine.signal();
+			entranceLine.signal();
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 	}
