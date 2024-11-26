@@ -20,6 +20,8 @@ void Person::printAboutMe(){
 		name << 
 		". My age classification is " <<
 		weight <<
+		". My energy level is " <<
+		energy <<
 		std::endl;
 }
 

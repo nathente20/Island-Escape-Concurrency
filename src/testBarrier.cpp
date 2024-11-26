@@ -2,6 +2,7 @@
 #include "person.h"
 #include <iostream>
 #include <thread>
+#include <string>
 
 /*
 void TestBarrier::run(Barrier& brr, Person& p) {
@@ -23,13 +24,17 @@ int main() {
 	std::shared_ptr<Person> e = std::make_shared<Person>("Rick", Weight::ADULT);
 	std::vector<std::shared_ptr<Person>> fam{
 		//a, b, c, d, e
-		a, d, e, b
 	};
+	for (auto j=0; j<50; j++) {
+		std::string name = "Person " + std::to_string(j);
+		fam.push_back(std::make_shared<Person>(name, Weight::ADULT));
+	}
+	fam.push_back(std::make_shared<Person>("Sole Child", Weight::CHILD));
+	
 	std::vector<std::thread> tFam{};
 	World w{fam.size()};
 	
 	for (auto j=0; j<fam.size(); j++) {
-		//tFam.push_back(std::thread(run, std::ref(brr), fam[j]));
 		tFam.push_back(std::thread(run, std::ref(w), fam[j]));
 	}
 
