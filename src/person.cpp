@@ -3,6 +3,8 @@
 #include <thread>
 #include <cstdlib>
 #include "person.h"
+#include "boat.h"
+#include "barrier.h"
 
 Person::Person(std::string n, enum Weight weight_class) : 
 	energy(4),
@@ -35,11 +37,12 @@ void Person::row(){
 }
 
 void Person::rest(){
+	std::this_thread::sleep_for(std::chrono::microseconds(1000000));
 	if (energy == 0) {
 		energy++;
 	}
 }
 
-//void Person::escape(World& w) {
-//}
+void Person::escape(Barrier& barrier) {
+}
 

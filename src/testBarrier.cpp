@@ -9,11 +9,13 @@ void TestBarrier::run(Barrier& brr, Person& p) {
 }
 */
 
-void run(Barrier& brr, std::shared_ptr<Person> p) {
-	brr.wait(p);
+void run(World& w, std::shared_ptr<Person> p) {
+	w.waitForBoat(p);
 }
 
 int main() {
+	World w;
+
 	std::shared_ptr<Person> a = std::make_shared<Person>("Jerry", Weight::ADULT);
 	std::shared_ptr<Person> b = std::make_shared<Person>("Morty", Weight::CHILD);
 	std::shared_ptr<Person> c = std::make_shared<Person>("Summer", Weight::CHILD);
@@ -24,9 +26,9 @@ int main() {
 	};
 	std::vector<std::thread> tFam{};
 	
-	Barrier brr;
 	for (auto j=0; j<fam.size(); j++) {
-		tFam.push_back(std::thread(run, std::ref(brr), fam[j]));
+		//tFam.push_back(std::thread(run, std::ref(brr), fam[j]));
+		tFam.push_back(std::thread(run, std::ref(w), fam[j]));
 	}
 
 	for (auto i=0; i< tFam.size(); i++) {

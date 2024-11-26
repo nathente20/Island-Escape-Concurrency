@@ -12,7 +12,8 @@ Barrier::Barrier() :
 	rolesDecided(false)
 	{ }
 
-bool Barrier::enter(std::shared_ptr<Person> p) {
+bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
+	std::cout << "trying " << p->getName() << std::endl;
 	entranceLine.wait();
 	bool retry;
 	{
@@ -57,13 +58,13 @@ bool Barrier::enter(std::shared_ptr<Person> p) {
 	return retry;
 }
 
-void Barrier::decideDriverAndPassenger() {
+void Barrier::decideDriverAndPassenger(World& w) {
 	{
 		std::lock_guard<std::mutex> lk(lock);
 		if (rolesDecided) {
-			// no longer need to keep track of these
+			// no longer need to store Person objects associated with desired threads
 			nextRiders.clear();
-			std::cout << "No work for me!" << std::endl;
+			//std::cout << "No work for me!" << std::endl;
 			return;
 		}
 		
@@ -83,12 +84,12 @@ void Barrier::decideDriverAndPassenger() {
 		std::cout << "Determined roles" << std::endl;
 		std::cout << p1->getName() << " is ";
 		if (!(p1->isDriver)) {
-			std::cout << "not ";
+			std::cout << "not";
 		}
 		std::cout << " driver" << std::endl;
 		std::cout << p2->getName() << " is ";
 		if (!(p2->isDriver)) {
-			std::cout << "not ";
+			std::cout << "not";
 		}
 		std::cout << " driver" << std::endl;
 
@@ -96,29 +97,30 @@ void Barrier::decideDriverAndPassenger() {
 	}
 }
 
-void Barrier::leave(std::shared_ptr<Person> p) {
+void Barrier::leave(std::shared_ptr<Person> p, World& w) {
 	{
 		std::lock_guard<std::mutex> lk(lock);
-		numReadyToLeave++;
-		//if (numReadyToLeave == 2) {
-			//readyToLeave.signal();
-		//}
+		// reset Barrier internal state
+		remainingCapacity += p->weight;
+		if (remainingCapacity == Weight::FULL) {
+			rolesDecided = false;
+		}
 	}
-	// waiting for signalWaitingGroup to be signaled
+	// waiting for signalNextRiders to be 
 	// we do not know for sure if boat is ready for more passengers
 	exit.wait();
 }
 
-void Barrier::signalWaitingGroup() {
-	//readyToLeave.wait();
+void Barrier::signalNextRiders(World& w) {
 	exit.signal();
 	exit.signal();
+	// do I need a wait here that links to a semaphore the boat keeps track of?
 	// can start looking for the next pair of people
 	entranceLine.signal();
 }
 
-void Barrier::wait(std::shared_ptr<Person> p) {
-	while (enter(p));
-	decideDriverAndPassenger();
-	leave(p);
+void Barrier::wait(std::shared_ptr<Person> p, World& w) {
+	while (enter(p, std::ref(w)));
+	decideDriverAndPassenger(std::ref(w));
+	leave(p, std::ref(w));
 }
