@@ -34,11 +34,4 @@ public:
 	//friend class TestBarrier;
 };
 
-/*
-class TestBarrier {
-public:
-	static void run(Barrier& brr, Person& p);
-};
-*/
-
 #endif

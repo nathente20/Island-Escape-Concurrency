@@ -1,6 +1,5 @@
 
 #include "person.h"
-#include "boat.h"
 
 void escape(std::shared_ptr<Person> p, Barrier& dock);
 
@@ -10,7 +9,6 @@ int main(int argv, char** argc){
 
 	std::shared_ptr<Person> a = std::make_shared<Person>("Jerry", Weight::ADULT);
 
-	Boat* bt = new Boat();
 	A->printAboutMe();
 	B->printAboutMe();
 	return 0;
