@@ -1,5 +1,6 @@
 #include <string>
 #include "semaphore.h"
+#include "boat.h"
 
 Boat::Boat() :
 	nextDriver(Semaphore(0)),

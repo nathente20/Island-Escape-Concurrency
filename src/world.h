@@ -17,6 +17,7 @@ private:
 	std::mutex boat;
 	std::mutex naiLock;
 	unsigned int numAtIsland;
+	bool driverOnly;
 
 public:
 	World(unsigned int numStranded);

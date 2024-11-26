@@ -25,13 +25,11 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 			retry = false;
 
 			remainingCapacity -= p->weight;
-			std::cout << "Capacity is " << remainingCapacity << std::endl;
 			// add person to collection of next riders
 			nextRiders.emplace_back(p);
 			// if at full capacity
 			if (remainingCapacity <= 1) {
 				// signaling pair of people that will get on boat
-				std::cout << p->getName() << " has made boat reach full capacity!!" << std::endl;
 				nextToEnter.signal();
 				nextToEnter.signal();
 				// not calling entranceLine.signal since we are no longer accepting people
@@ -43,12 +41,9 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 			lock.unlock();
 			// this thread is ready to enter barrier
 			nextToEnter.wait();
-			std::cout << p->getName() << " is verified!!" << std::endl;
-			p->printAboutMe();
 		}
 		else {
 			retry = true;
-			std::cout << p->getName() << " is too heavy" << std::endl;
 			lock.unlock();
 			entranceLine.signal();
 			std::this_thread::sleep_for(std::chrono::microseconds(1));

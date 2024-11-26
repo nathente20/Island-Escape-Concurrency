@@ -28,19 +28,17 @@ void Person::setRole(bool role) {
 	this->isDriver = role;
 }
 
-void Person::row(){
+void Person::row(World& w){
 	// lock randomizer later
 	int waitTime;
 	// [1 000 000, 4 000 000]
 	waitTime = (std::rand() % 3000000) + 1000000; 
-	std::cout << getName() << " rowing" << std::endl;
 	std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 	energy--;
 
 }
 
 void Person::rest(){
-	std::cout << getName() << " resting" << std::endl;
 	std::this_thread::sleep_for(std::chrono::microseconds(1000000));
 	if (energy == 0) {
 		energy++;
@@ -51,6 +49,4 @@ bool Person::isTired() {
 	return energy == 0;
 }
 
-//void Person::escape() {
-//}
 

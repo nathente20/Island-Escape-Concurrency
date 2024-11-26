@@ -2,10 +2,7 @@
 #define _PERSON_H_
 #include <string>
 #include "semaphore.h"
-
-#include "barrier.h"
-class Barrier;
-
+#include "world.h"
 
 enum Weight {
 	CHILD = 2,
@@ -24,10 +21,9 @@ public:
 	std::string getName();
 	void printAboutMe();
 	void setRole(bool role);
-	void row();
+	void row(World& w);
 	void rest();
 	bool isTired();
-	//void escape(Barrier& barrier); // I think this is supposed to be the driver function that is run as its own thread, will add necessary context as needed
 
 };
 
