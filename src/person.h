@@ -28,7 +28,7 @@ public:
 	void setRole(bool role);
 	void row();
 	void rest();
-	void escape(Barrier& barrier); // I think this is supposed to be the driver function that is run as its own thread, will add necessary context as needed
+	//void escape(Barrier& barrier); // I think this is supposed to be the driver function that is run as its own thread, will add necessary context as needed
 
 };
 

@@ -32,17 +32,20 @@ void Person::row(){
 	int waitTime;
 	// [1 000 000, 4 000 000]
 	waitTime = (std::rand() % 3000000) + 1000000; 
+	std::cout << getName() << " rowing" << std::endl;
 	std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
+	energy--;
 
 }
 
 void Person::rest(){
+	std::cout << getName() << " resting" << std::endl;
 	std::this_thread::sleep_for(std::chrono::microseconds(1000000));
 	if (energy == 0) {
 		energy++;
 	}
 }
 
-void Person::escape(Barrier& barrier) {
-}
+//void Person::escape() {
+//}
 

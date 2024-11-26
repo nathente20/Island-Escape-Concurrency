@@ -7,7 +7,7 @@
 Barrier::Barrier() :
 	nextToEnter(Semaphore(0)),
 	entranceLine(Semaphore(1)),
-	exit(Semaphore(0)),
+	exit(Semaphore(2)),
 	remainingCapacity(Weight::FULL),
 	rolesDecided(false)
 	{ }

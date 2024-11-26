@@ -13,13 +13,15 @@ class World {
 private:
 	Barrier* dock;
 	Semaphore everyoneInBoat;
+	Semaphore atMainland;
 	std::mutex boat;
 	std::mutex nplLock;
 	unsigned int numPeopleLeft;
 
 public:
 	World(unsigned int numStranded);
-	void waitForBoat(std::shared_ptr<Person> p);
+	void escapeIsland(std::shared_ptr<Person> p);
+	void acceptNextRiders();
 	
 };
 

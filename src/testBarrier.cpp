@@ -10,7 +10,8 @@ void TestBarrier::run(Barrier& brr, Person& p) {
 */
 
 void run(World& w, std::shared_ptr<Person> p) {
-	w.waitForBoat(p);
+	//w.waitForBoat(p);
+	w.escapeIsland(p);
 }
 
 int main() {
