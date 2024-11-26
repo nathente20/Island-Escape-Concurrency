@@ -3,7 +3,6 @@
 #include <thread>
 #include <cstdlib>
 #include "person.h"
-#include "boat.h"
 #include "barrier.h"
 
 Person::Person(std::string n, enum Weight weight_class) : 

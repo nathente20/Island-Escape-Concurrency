@@ -3,9 +3,7 @@
 #include <string>
 #include "semaphore.h"
 
-#include "boat.h"
 #include "barrier.h"
-class Boat;
 class Barrier;
 
 
