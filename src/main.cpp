@@ -10,20 +10,24 @@ void triggerEscape(World& w, std::shared_ptr<Person> p) {
 }
 
 int main(int argv, char** argc){
+	int numChildren = 10;
+	int numAdults = 10;
+
 	std::vector<std::shared_ptr<Person>> stranded;
-	for (auto j=0; j<50; j++) {
-		std::string name = "Person " + std::to_string(j);
+	for (auto c=1; c<=numChildren; c++) {
+		std::string name = "Child " + std::to_string(c);
+		stranded.push_back(std::make_shared<Person>(name, Weight::CHILD));
+	}
+	for (auto a=1; a<=numAdults; a++) {
+		std::string name = "Adult " + std::to_string(a);
 		stranded.push_back(std::make_shared<Person>(name, Weight::ADULT));
 	}
-	stranded.push_back(std::make_shared<Person>("Sole Child", Weight::CHILD));
-	
-	std::vector<std::thread> tStranded{};
 	World w{stranded.size()};
 	
+	std::vector<std::thread> tStranded{};
 	for (auto p : stranded){
 		tStranded.push_back(std::thread(triggerEscape, std::ref(w), p));
 	}
-
 	for (auto i=0; i< tStranded.size(); i++) {
 		tStranded[i].join();
 	}
