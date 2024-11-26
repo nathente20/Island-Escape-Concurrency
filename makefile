@@ -12,14 +12,11 @@ obj/barrier.o: src/barrier.cpp src/barrier.h
 obj/person.o: src/person.cpp src/person.h 
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${GCC} ${STD} -c -o $@ $<
-obj/barrier.o: src/barrier.cpp src/barrier.h
-	[ -d $(OBJ) ] || mkdir -p $(OBJ)
-	${GCC} ${STD} -c -o $@ $<
 obj/world.o: src/world.cpp src/world.h
 	[ -d $(OBJ) ] || mkdir -p $(OBJ)
 	${GCC} ${STD} -c -o $@ $<
 
-bin/main: obj/semaphore.o obj/person.o obj/world.o src/main.cpp
+bin/main: obj/semaphore.o obj/person.o obj/barrier.o obj/world.o src/main.cpp
 	[ -d $(BIN) ] || mkdir -p $(BIN)
 	${GCC} ${STD} -o $@ $^
 run: bin/main

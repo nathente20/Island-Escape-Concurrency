@@ -1,36 +1,32 @@
-
+#include <iostream>
+#include <thread>
+#include <string>
+#include <memory>
 #include "person.h"
+#include "world.h"
 
-void escape(std::shared_ptr<Person> p, Barrier& dock);
+void triggerEscape(World& w, std::shared_ptr<Person> p) {
+	w.escapeIsland(p);
+}
 
 int main(int argv, char** argc){
-	Person* A = new Person("Mike", Age::ADULT);
-	Person* B = new Person("Ted", Age::ADULT);
+	std::vector<std::shared_ptr<Person>> stranded;
+	for (auto j=0; j<50; j++) {
+		std::string name = "Person " + std::to_string(j);
+		stranded.push_back(std::make_shared<Person>(name, Weight::ADULT));
+	}
+	stranded.push_back(std::make_shared<Person>("Sole Child", Weight::CHILD));
+	
+	std::vector<std::thread> tStranded{};
+	World w{stranded.size()};
+	
+	for (auto p : stranded){
+		tStranded.push_back(std::thread(triggerEscape, std::ref(w), p));
+	}
 
-	std::shared_ptr<Person> a = std::make_shared<Person>("Jerry", Weight::ADULT);
+	for (auto i=0; i< tStranded.size(); i++) {
+		tStranded[i].join();
+	}
 
-	A->printAboutMe();
-	B->printAboutMe();
 	return 0;
 }
-
-void escape(std::shared_ptr<Person> p, Barrier& dock) {
-	while (true) {
-		dock.wait(p);
-		if (p->isDriver) {
-			everyoneInBoat.wait();
-			p->row();
-			w->arrivedAtMainland.signal();
-			break;
-		}
-		else {
-			boat.lock();
-			everyoneInBoat.signal();
-			p->rest();
-			w->arrivedAtMainland.wait();
-			p->row();
-			boat.unlock();
-		}
-	}
-}
-
