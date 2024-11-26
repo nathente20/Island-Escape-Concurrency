@@ -46,6 +46,10 @@ void Person::rest(){
 	}
 }
 
+bool Person::isTired() {
+	return energy == 0;
+}
+
 //void Person::escape() {
 //}
 

@@ -15,8 +15,8 @@ private:
 	Semaphore everyoneInBoat;
 	Semaphore atMainland;
 	std::mutex boat;
-	std::mutex nplLock;
-	unsigned int numPeopleLeft;
+	std::mutex naiLock;
+	unsigned int numAtIsland;
 
 public:
 	World(unsigned int numStranded);

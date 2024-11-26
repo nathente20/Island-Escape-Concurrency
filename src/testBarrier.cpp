@@ -22,7 +22,8 @@ int main() {
 	std::shared_ptr<Person> d = std::make_shared<Person>("Beth", Weight::ADULT);
 	std::shared_ptr<Person> e = std::make_shared<Person>("Rick", Weight::ADULT);
 	std::vector<std::shared_ptr<Person>> fam{
-		a, b, c, d, e
+		//a, b, c, d, e
+		a, d, e, b
 	};
 	std::vector<std::thread> tFam{};
 	World w{fam.size()};

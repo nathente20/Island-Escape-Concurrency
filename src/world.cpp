@@ -4,7 +4,7 @@
 World::World(unsigned int numStranded) :
 	dock(new Barrier),
 	everyoneInBoat(0),
-	numPeopleLeft(numStranded) {}
+	numAtIsland(numStranded) {}
 
 
 void World::escapeIsland(std::shared_ptr<Person> p) {
@@ -12,25 +12,43 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 		dock->wait(p, *this);
 		if (p->isDriver) {
 			everyoneInBoat.wait();
+			{
+				std::lock_guard<std::mutex> lk(naiLock);
+				numAtIsland--;
+			}
 			p->row();
 			atMainland.signal();
-			{
-				std::lock_guard<std::mutex> lk(nplLock);
-				numPeopleLeft--;
-			}
 			return;
 		}
 		else {
 			std::lock_guard<std::mutex> lk(boat);
+			{
+				std::lock_guard<std::mutex> lk(naiLock);
+				numAtIsland--;
+			}
 			everyoneInBoat.signal();
 			p->rest();
 			atMainland.wait();
-			p->row();
-			boat.unlock();
+			naiLock.lock();
+			if (numAtIsland == 0) {
+				naiLock.unlock();
+				return;
+			}
+			else {
+				naiLock.unlock();
+				p->row();
+				boat.unlock();
+			}
 		}
 		// returning to island
+		{
+			std::lock_guard<std::mutex> lk(naiLock);
+			numAtIsland++;
+		}
 		acceptNextRiders();
-		p->rest();
+		if (p->isTired()) {
+			p->rest();
+		}
 	}
 }
 
