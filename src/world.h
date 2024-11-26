@@ -18,7 +18,7 @@ private:
 	unsigned int numPeopleLeft;
 
 public:
-	World();
+	World(unsigned int numStranded);
 	void waitForBoat(std::shared_ptr<Person> p);
 	
 };

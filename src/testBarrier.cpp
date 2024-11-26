@@ -14,7 +14,6 @@ void run(World& w, std::shared_ptr<Person> p) {
 }
 
 int main() {
-	World w;
 
 	std::shared_ptr<Person> a = std::make_shared<Person>("Jerry", Weight::ADULT);
 	std::shared_ptr<Person> b = std::make_shared<Person>("Morty", Weight::CHILD);
@@ -25,6 +24,7 @@ int main() {
 		a, b, c, d, e
 	};
 	std::vector<std::thread> tFam{};
+	World w{fam.size()};
 	
 	for (auto j=0; j<fam.size(); j++) {
 		//tFam.push_back(std::thread(run, std::ref(brr), fam[j]));

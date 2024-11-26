@@ -13,7 +13,6 @@ Barrier::Barrier() :
 	{ }
 
 bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
-	std::cout << "trying " << p->getName() << std::endl;
 	entranceLine.wait();
 	bool retry;
 	{
