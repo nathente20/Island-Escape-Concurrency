@@ -17,9 +17,6 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 	bool retry;
 	{
 		lock.lock();
-		std::cout << "Trying " << p->getName() << std::endl;
-		// makes output easier to read
-		std::this_thread::sleep_for(std::chrono::microseconds(100000));
 		// if there is space left for this person
 		if (remainingCapacity >= p->weight) {
 			retry = false;
@@ -29,13 +26,17 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 			nextRiders.emplace_back(p);
 			// if at full capacity
 			if (remainingCapacity <= 1) {
+				// increment counters for trips where a pair riding
+				auto whichPairInBoat = static_cast<Stats>(Weight::FULL - remainingCapacity);
+				w.incrementStat(static_cast<Stats>(whichPairInBoat));
 				// signaling pair of people that will get on boat
 				nextToEnter.signal();
 				nextToEnter.signal();
 				// not calling entranceLine.signal since we are no longer accepting people
 			}
+			// still need one more rider
 			else {
-				// allow another thread to try to get in if incomplete pair 
+				// allow another thread to try entry
 				entranceLine.signal();
 			}
 			lock.unlock();

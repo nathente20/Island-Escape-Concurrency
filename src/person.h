@@ -4,6 +4,9 @@
 #include "semaphore.h"
 #include "world.h"
 
+class World;
+
+// reliant on these values staying this way for how the world tracks stats
 enum Weight {
 	CHILD = 2,
 	ADULT = 3,
@@ -21,7 +24,7 @@ public:
 	std::string getName();
 	void printAboutMe();
 	void setRole(bool role);
-	void row(World& w);
+	void row(World& w, bool driverOnly, bool toMainland);
 	void rest();
 	bool isTired();
 

@@ -28,14 +28,31 @@ void Person::setRole(bool role) {
 	this->isDriver = role;
 }
 
-void Person::row(World& w){
-	// lock randomizer later
+void Person::row(World& w, bool driverOnly, bool toMainland){
+	// stat tracking
+	if (toMainland) {
+		//w.stats[Stats::TO_MAINLAND]++;
+		w.incrementStat(Stats::TO_MAINLAND);
+	}
+	else {
+		//w.stats[Stats::TO_ISLAND]++;
+		w.incrementStat(Stats::TO_ISLAND);
+	}
+	if (driverOnly) {
+		//w.stats[Stats::DRIVER_ONLY]++;
+		w.incrementStat(Stats::DRIVER_ONLY);
+	}
+	// increment CHILD_DROVE or ADULT_DROVE
+	auto whichDriver = static_cast<Stats>(weight);
+	w.incrementStat(whichDriver);
+
+	// behavior of person
+	// TODO: lock randomizer later
 	int waitTime;
 	// [1 000 000, 4 000 000]
 	waitTime = (std::rand() % 3000000) + 1000000; 
 	std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 	energy--;
-
 }
 
 void Person::rest(){
