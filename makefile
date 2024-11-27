@@ -20,17 +20,7 @@ bin/main: obj/semaphore.o obj/person.o obj/barrier.o obj/world.o src/main.cpp
 	[ -d $(BIN) ] || mkdir -p $(BIN)
 	${GCC} ${STD} -o $@ $^
 run: bin/main
-	./$<
-bin/testPeople: obj/semaphore.o obj/person.o src/testPeople.cpp
-	[ -d $(BIN) ] || mkdir -p $(BIN)
-	${GCC} ${STD} -o $@ $^
-testPeople: bin/testPeople
-	./$<
-bin/testBarrier: obj/semaphore.o obj/barrier.o obj/person.o obj/world.o src/testBarrier.cpp
-	[ -d $(BIN) ] || mkdir -p $(BIN)
-	${GCC} ${STD} -o $@ $^
-testBarrier: bin/testBarrier
-	./$<
+	./$< 7 9
 clean:
 	rm -f obj/*.o
 	rm -f bin/*

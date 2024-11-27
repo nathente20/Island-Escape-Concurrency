@@ -24,7 +24,7 @@ private:
 
 	void enter(std::shared_ptr<Person> p, World& w);
 	void decideDriverAndPassenger(World& w);
-	void leave(std::shared_ptr<Person> p, World& w);
+	void waitAtExit(std::shared_ptr<Person> p, World& w);
 
 public:
 	Barrier();

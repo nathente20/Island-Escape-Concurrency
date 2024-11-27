@@ -2,7 +2,7 @@
 #include "world.h"
 #include "barrier.h"
 
-World::World(unsigned int numStranded) :
+World::World(long unsigned int numStranded) :
 	dock(new Barrier),
 	everyoneInBoat(0),
 	numAtIsland(numStranded),

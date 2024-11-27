@@ -35,7 +35,7 @@ private:
 	unsigned long int numAtIsland;
 
 public:
-	World(unsigned int numStranded);
+	World(unsigned long int numStranded);
 	std::mutex printLock;
 	std::mutex randLock;
 	void escapeIsland(std::shared_ptr<Person> p);

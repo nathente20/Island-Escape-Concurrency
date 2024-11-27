@@ -9,9 +9,31 @@ void triggerEscape(World& w, std::shared_ptr<Person> p) {
 	w.escapeIsland(p);
 }
 
-int main(int argv, char** argc){
-	int numChildren = 10;
-	int numAdults = 10;
+int parseNumber(std::string numStr) {
+	try {
+		unsigned int parsed = stoi(numStr);
+		if (parsed < 1) {
+			return -1;
+		}
+		return parsed;
+	}
+	catch (std::exception) {
+		return -1;
+	}
+}
+
+int main(int argc, char** argv){
+	if (argc != 3) {
+		std::cout << "Unable to run race. Please provide two whole number arguments. First for number adults. Second for number of children" << std::endl;
+		return -1;
+	}
+
+	int numAdults = parseNumber(std::string{argv[1]});
+	int numChildren = parseNumber(std::string{argv[2]});
+	if (numChildren == -1 || numAdults == -1) {
+		std::cout << "Unable to run race. Please provide two whole number arguments. First for number adults. Second for number of children" << std::endl;
+		return -1;
+	}
 
 	std::vector<std::shared_ptr<Person>> stranded;
 	for (auto c=1; c<=numChildren; c++) {
