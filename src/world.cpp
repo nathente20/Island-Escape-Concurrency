@@ -1,3 +1,4 @@
+#include <iostream>
 #include "world.h"
 #include "barrier.h"
 
@@ -19,6 +20,10 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 				std::lock_guard<std::mutex> lk(naiLock);
 				numAtIsland--;
 			}
+			{
+				std::lock_guard<std::mutex> lk(printLock);
+				std::cout << p->getName() << " got into driver's seat of boat." << std::endl;
+			}
 			// you never end up leaving the dock alone
 			p->row(*this, false, true);
 			atMainland.signal();
@@ -27,6 +32,10 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 		// if you are the designated passenger
 		else {
 			std::lock_guard<std::mutex> lk(boat);
+			{
+				std::lock_guard<std::mutex> lk(printLock);
+				std::cout << p->getName() << " got into passenger seat of boat." << std::endl;
+			}
 			{
 				std::lock_guard<std::mutex> lk(naiLock);
 				numAtIsland--;
@@ -40,7 +49,7 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 				naiLock.unlock();
 				return;
 			}
-			//  row back from mainland to island alone
+			// row back from mainland to island alone
 			else {
 				naiLock.unlock();
 				p->row(*this, true, false);
@@ -68,3 +77,15 @@ void World::incrementStat(enum Stats s) {
 	stats[s]++;
 }
 
+void World::printSummary() {
+	std::cout <<
+	"=================" << std::endl <<
+	"Summary of Events" << std::endl <<
+	"Boats traveled to mainland: " << stats[Stats::TO_MAINLAND] << std::endl <<
+	"Boats returned to island: " << stats[Stats::TO_ISLAND] << std::endl <<
+	"Boats with 2 children: " << stats[Stats::TWO_CHILDREN] << std::endl <<
+	"Boats with 1 child and 1 adult: " << stats[Stats::ONE_EACH] << std::endl <<
+	"Boats with only 1 person (child or adult): " << stats[Stats::DRIVER_ONLY] << std::endl <<
+	"Times adults were the driver: " << stats[Stats::ADULT_DROVE] << std::endl <<
+	"Times children were the driver: " << stats[Stats::CHILD_DROVE] << std::endl;
+}

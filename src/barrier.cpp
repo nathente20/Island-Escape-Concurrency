@@ -57,9 +57,6 @@ void Barrier::decideDriverAndPassenger(World& w) {
 	{
 		std::lock_guard<std::mutex> lk(lock);
 		if (rolesDecided) {
-			// no longer need to store Person objects associated with desired threads
-			nextRiders.clear();
-			//std::cout << "No work for me!" << std::endl;
 			return;
 		}
 		
@@ -75,20 +72,8 @@ void Barrier::decideDriverAndPassenger(World& w) {
 			p2->isDriver = true;
 		}
 
-		std::cout << "===============================" << std::endl;
-		std::cout << "Determined roles" << std::endl;
-		std::cout << p1->getName() << " is ";
-		if (!(p1->isDriver)) {
-			std::cout << "not";
-		}
-		std::cout << " driver" << std::endl;
-		std::cout << p2->getName() << " is ";
-		if (!(p2->isDriver)) {
-			std::cout << "not";
-		}
-		std::cout << " driver" << std::endl;
-
 		rolesDecided = true;
+		nextRiders.clear();
 	}
 }
 

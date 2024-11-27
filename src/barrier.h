@@ -22,7 +22,6 @@ private:
 	int remainingCapacity;
 	bool rolesDecided;
 
-	//void enter(Person& p);
 	void decideDriverAndPassenger(World& w);
 	void leave(std::shared_ptr<Person> p, World& w);
 
@@ -31,7 +30,6 @@ public:
 	void wait(std::shared_ptr<Person> p, World& w);
 	void signalNextRiders(World& w);
 	bool enter(std::shared_ptr<Person> p, World& w);
-	//friend class TestBarrier;
 };
 
 #endif

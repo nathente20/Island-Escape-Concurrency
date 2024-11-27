@@ -31,15 +31,20 @@ void Person::setRole(bool role) {
 void Person::row(World& w, bool driverOnly, bool toMainland){
 	// stat tracking
 	if (toMainland) {
-		//w.stats[Stats::TO_MAINLAND]++;
 		w.incrementStat(Stats::TO_MAINLAND);
+		{
+			std::lock_guard<std::mutex> lk(w.printLock);
+			std::cout << "Boat is traveling from island to mainland." << std::endl;
+		}
 	}
 	else {
-		//w.stats[Stats::TO_ISLAND]++;
 		w.incrementStat(Stats::TO_ISLAND);
+		{
+			std::lock_guard<std::mutex> lk(w.printLock);
+			std::cout << "Boat is traveling from mainland to island." << std::endl;
+		}
 	}
 	if (driverOnly) {
-		//w.stats[Stats::DRIVER_ONLY]++;
 		w.incrementStat(Stats::DRIVER_ONLY);
 	}
 	// increment CHILD_DROVE or ADULT_DROVE

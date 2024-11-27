@@ -31,6 +31,7 @@ int main(int argv, char** argc){
 	for (auto i=0; i< tStranded.size(); i++) {
 		tStranded[i].join();
 	}
-
+	
+	w.printSummary();
 	return 0;
 }

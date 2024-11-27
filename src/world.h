@@ -37,6 +37,8 @@ public:
 	void escapeIsland(std::shared_ptr<Person> p);
 	void acceptNextRiders();
 	void incrementStat(enum Stats stat);
+	std::mutex printLock;
+	void printSummary();
 	
 };
 
