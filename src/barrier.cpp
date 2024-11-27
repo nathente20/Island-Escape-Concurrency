@@ -12,10 +12,10 @@ Barrier::Barrier() :
 	rolesDecided(false)
 	{ }
 
-bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
-	entranceLine.wait();
-	bool retry;
-	{
+void Barrier::enter(std::shared_ptr<Person> p, World& w) {
+	bool retry = true;
+	while (retry) {
+		entranceLine.wait();
 		lock.lock();
 		// if there is space left for this person
 		if (remainingCapacity >= p->weight) {
@@ -29,10 +29,10 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 				// increment counters for trips where a pair riding
 				auto whichPairInBoat = static_cast<Stats>(Weight::FULL - remainingCapacity);
 				w.incrementStat(static_cast<Stats>(whichPairInBoat));
-				// signaling pair of people that will get on boat
+				// signaling pair of people that will get on together 
 				nextToEnter.signal();
 				nextToEnter.signal();
-				// not calling entranceLine.signal since we are no longer accepting people
+				// not signaling entranceLine since we are no longer accepting people
 			}
 			// still need one more rider
 			else {
@@ -47,10 +47,10 @@ bool Barrier::enter(std::shared_ptr<Person> p, World& w) {
 			retry = true;
 			lock.unlock();
 			entranceLine.signal();
+			// prevents issue where this thread cuts to the front of line on retry
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 	}
-	return retry;
 }
 
 void Barrier::decideDriverAndPassenger(World& w) {
@@ -86,7 +86,7 @@ void Barrier::leave(std::shared_ptr<Person> p, World& w) {
 			rolesDecided = false;
 		}
 	}
-	// waiting for signalNextRiders to be 
+	// waiting for signalNextRiders to be called
 	// we do not know for sure if boat is ready for more passengers
 	exit.wait();
 }
@@ -94,13 +94,13 @@ void Barrier::leave(std::shared_ptr<Person> p, World& w) {
 void Barrier::signalNextRiders(World& w) {
 	exit.signal();
 	exit.signal();
-	// do I need a wait here that links to a semaphore the boat keeps track of?
+	w.waitForEveryoneToBoard();
 	// can start looking for the next pair of people
 	entranceLine.signal();
 }
 
 void Barrier::wait(std::shared_ptr<Person> p, World& w) {
-	while (enter(p, std::ref(w)));
+	enter(p, std::ref(w));
 	decideDriverAndPassenger(std::ref(w));
 	leave(p, std::ref(w));
 }

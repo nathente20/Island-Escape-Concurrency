@@ -24,21 +24,25 @@ enum Stats {
 class World {
 private:
 	Barrier* dock;
+	std::mutex boat;
 	Semaphore everyoneInBoat;
 	Semaphore atMainland;
-	std::mutex boat;
-	std::mutex naiLock;
-	unsigned int numAtIsland;
+
+	std::mutex statsLock;
 	std::vector<int> stats;
-	std::mutex statLock;
+
+	std::mutex naiLock;
+	unsigned long int numAtIsland;
 
 public:
 	World(unsigned int numStranded);
+	std::mutex printLock;
+	std::mutex randLock;
 	void escapeIsland(std::shared_ptr<Person> p);
 	void acceptNextRiders();
 	void incrementStat(enum Stats stat);
-	std::mutex printLock;
 	void printSummary();
+	void waitForEveryoneToBoard();
 	
 };
 

@@ -40,6 +40,9 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 				std::lock_guard<std::mutex> lk(naiLock);
 				numAtIsland--;
 			}
+			// signal to the driver to start rowing
+			everyoneInBoat.signal();
+			// signal to the dock to allow entry
 			everyoneInBoat.signal();
 			p->rest();
 			atMainland.wait();
@@ -73,8 +76,12 @@ void World::acceptNextRiders() {
 }
 
 void World::incrementStat(enum Stats s) {
-	std::lock_guard<std::mutex> lk(statLock);
+	std::lock_guard<std::mutex> lk(statsLock);
 	stats[s]++;
+}
+
+void World::waitForEveryoneToBoard() {
+	everyoneInBoat.wait();
 }
 
 void World::printSummary() {

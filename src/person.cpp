@@ -51,11 +51,13 @@ void Person::row(World& w, bool driverOnly, bool toMainland){
 	auto whichDriver = static_cast<Stats>(weight);
 	w.incrementStat(whichDriver);
 
-	// behavior of person
-	// TODO: lock randomizer later
+	// simulate time doing work 
 	int waitTime;
-	// [1 000 000, 4 000 000]
-	waitTime = (std::rand() % 3000000) + 1000000; 
+	{
+		std::lock_guard<std::mutex> lk(w.randLock);
+		// [1 000 000, 4 000 000]
+		waitTime = (std::rand() % 3000000) + 1000000; 
+	}
 	std::this_thread::sleep_for(std::chrono::microseconds(waitTime));
 	energy--;
 }
