@@ -2,7 +2,7 @@
 #include "world.h"
 #include "barrier.h"
 
-World::World(long unsigned int numStranded) :
+World::World(unsigned long int numStranded) :
 	dock(new Barrier),
 	everyoneInBoat(0),
 	numAtIsland(numStranded),
@@ -55,6 +55,10 @@ void World::escapeIsland(std::shared_ptr<Person> p) {
 			// row back from mainland to island alone
 			else {
 				naiLock.unlock();
+				{
+					std::lock_guard<std::mutex> lk(printLock);
+					std::cout << p->getName() << " got into driver's seat of boat." << std::endl;
+				}
 				p->row(*this, true, false);
 
 				boat.unlock();

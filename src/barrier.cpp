@@ -9,8 +9,9 @@ Barrier::Barrier() :
 	entranceLine(Semaphore(1)),
 	exit(Semaphore(2)),
 	remainingCapacity(Weight::FULL),
-	rolesDecided(false)
-	{ }
+	rolesDecided(false){
+	nextPairWaiting.lock();
+}
 
 void Barrier::enter(std::shared_ptr<Person> p, World& w) {
 	bool retry = true;
@@ -84,6 +85,7 @@ void Barrier::waitAtExit(std::shared_ptr<Person> p, World& w) {
 		remainingCapacity += p->weight;
 		if (remainingCapacity == Weight::FULL) {
 			rolesDecided = false;
+			nextPairWaiting.unlock();
 		}
 	}
 	// waiting for signalNextRiders to be called
@@ -92,6 +94,7 @@ void Barrier::waitAtExit(std::shared_ptr<Person> p, World& w) {
 }
 
 void Barrier::signalNextRiders(World& w) {
+	nextPairWaiting.lock(); // prevents multiple simultaneous calls of signalNextRiders from allowing multiple pairs at the exit
 	exit.signal();
 	exit.signal();
 	w.waitForEveryoneToBoard();

@@ -1,3 +1,12 @@
+/**
+  @file
+  @author Nathen Te <nlt47>
+  @date November 27, 2024
+  @section DESCRIPTION
+
+  This file provides the definition of a Person trying to escape the deserted island in the toy problem. It also defines weight classes which are relevant to Person and other related classes such Barrier and World.
+*/
+
 #ifndef _PERSON_H_
 #define _PERSON_H_
 #include <string>
