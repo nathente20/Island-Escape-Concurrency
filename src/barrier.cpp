@@ -78,7 +78,7 @@ void Barrier::decideDriverAndPassenger(World& w) {
 	}
 }
 
-void Barrier::waitAtExit(std::shared_ptr<Person> p, World& w) {
+void Barrier::waitAtExit(std::shared_ptr<Person> p) {
 	{
 		std::lock_guard<std::mutex> lk(lock);
 		// reset Barrier internal state
@@ -105,5 +105,5 @@ void Barrier::signalNextRiders(World& w) {
 void Barrier::wait(std::shared_ptr<Person> p, World& w) {
 	enter(p, std::ref(w));
 	decideDriverAndPassenger(std::ref(w));
-	waitAtExit(p, std::ref(w));
+	waitAtExit(p);
 }

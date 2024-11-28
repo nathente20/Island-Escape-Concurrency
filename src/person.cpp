@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 #include <cstdlib>
+#include <stdexcept>
 #include "person.h"
 #include "barrier.h"
 
@@ -24,11 +25,11 @@ void Person::printAboutMe(){
 		std::endl;
 }
 
-void Person::setRole(bool role) {
-	this->isDriver = role;
-}
-
 void Person::row(World& w, bool driverOnly, bool toMainland){
+	if (isTired()){
+		throw std::runtime_error("Exception caught: Exhausted person assigned as driver. Simulation failed");
+	}
+
 	// stat tracking
 	if (toMainland) {
 		w.incrementStat(Stats::TO_MAINLAND);

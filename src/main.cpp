@@ -1,3 +1,21 @@
+/**
+  @mainpage CS 361 - Homework 7
+  @section DESCRIPTION
+
+  This program simulates a toy problem of adults and children trying to escape an island. It takes two whole (positive integer) arguments specifying (1) the number adults and (2) the number of children stranded on an island. All are trying to escape using one boat. The boat can only allow either one person of any age, two children, or a child and adult. It cannot support two adults. A person that rows 4 or more times must rest before rowing again. To rest, they either are a passenger in the boat while someone else drives, or they wait on the island and do not pair up. These constraints were used to motivate this simulation.
+
+*/
+
+/**
+  @file
+  @author Nathen Te <nlt47>
+  @date November 27, 2024
+  @section DESCRIPTION
+
+  This file is the driver simulating a number of adults and children escaping from a remote island with one boat.
+*/
+
+
 #include <iostream>
 #include <thread>
 #include <string>
@@ -5,10 +23,20 @@
 #include "person.h"
 #include "world.h"
 
+/**
+  This is used to seed a thread that is simulating a person trying to escape from the island.
+  @param w The world context
+  @param p The person trying to escape
+**/
 void triggerEscape(World& w, std::shared_ptr<Person> p) {
 	w.escapeIsland(p);
 }
 
+/**
+  This is used to parse command line integers. If the argument passed is a valid positive integer, then that number is returned. If not, -1 is returned.
+  @param numStr String representation of the number being parsed
+  @return Returns an integer that either represents failure (-1) or the parsed whole number
+**/
 int parseNumber(std::string numStr) {
 	try {
 		unsigned int parsed = stoi(numStr);
